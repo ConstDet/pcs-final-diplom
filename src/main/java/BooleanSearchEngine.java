@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.util.*;
 
 public class BooleanSearchEngine implements SearchEngine {
-    List<PageEntry> pageEntries;
+    List<IndexedWord> indexedWordsPerPage;
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
-        pageEntries = new ArrayList<>();
+        indexedWordsPerPage = new ArrayList<>();
         List<File> filesFolder = List.of(Objects.requireNonNull(pdfsDir.listFiles()));
         for (File pathToFile : filesFolder) {
             try (var doc = new PdfDocument(new PdfReader(pathToFile));) {
@@ -27,7 +27,7 @@ public class BooleanSearchEngine implements SearchEngine {
                         freqs.put(word, freqs.getOrDefault(word, 0) + 1);
                     }
                     for (Map.Entry<String, Integer> wordFreqs : freqs.entrySet()) {
-                        pageEntries.add(new PageEntry(wordFreqs.getKey(), pathToFile.getName(), i,
+                        indexedWordsPerPage.add(new IndexedWord(wordFreqs.getKey(), pathToFile.getName(), i,
                                 wordFreqs.getValue()));
                     }
                 }
@@ -38,12 +38,15 @@ public class BooleanSearchEngine implements SearchEngine {
     @Override
     public List<PageEntry> search(String word) {
         List<PageEntry> wordSearchResult = new ArrayList<>();
-        Collections.sort(pageEntries);
-        for (PageEntry pageEntry : pageEntries) {
-            if (pageEntry.getWord().equals(word)) {
-                wordSearchResult.add(pageEntry);
+        for (IndexedWord indexedWord : indexedWordsPerPage) {
+            if (indexedWord.getWord().equals(word)) {
+                wordSearchResult.add(new PageEntry(
+                        indexedWord.getPdfName(),
+                        indexedWord.getPage(),
+                        indexedWord.getCount()));
             }
         }
+        Collections.sort(wordSearchResult);
         return wordSearchResult;
     }
 }
