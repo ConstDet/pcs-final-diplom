@@ -15,9 +15,7 @@ public class SearchWordClient {
                  PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                  BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
                 System.out.println("Введите слово для поиска:");
-                String searchWord = scanner.nextLine();
-                String requestString = "{ \"word\": \""+ searchWord +"\" }";
-                out.println(requestString);
+                out.println(scanner.nextLine());
                 System.out.println(in.readLine());
             } catch (IOException e) {
                 throw new RuntimeException(e);

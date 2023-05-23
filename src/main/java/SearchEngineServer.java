@@ -1,5 +1,3 @@
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -21,16 +19,9 @@ public class SearchEngineServer {
                 try (Socket socket = serverSocket.accept();
                      PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-                    out.println(engine.search(parserJson(in)));
+                    out.println(engine.search(in.readLine()));
                 }
             }
         }
-    }
-
-    private String parserJson(BufferedReader in) throws IOException {
-        JsonParser parser = new JsonParser();
-        Object obj = parser.parse(in.readLine());
-        JsonObject jsonObject = (JsonObject) obj;
-        return jsonObject.get("word").getAsString();
     }
 }
