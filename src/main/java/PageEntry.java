@@ -9,6 +9,18 @@ public class PageEntry implements Comparable<PageEntry> {
         this.count = count;
     }
 
+    public String getPdfName() {
+        return pdfName;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
     @Override
     public int compareTo(PageEntry o) {
         if (this.count < o.count) {
@@ -39,6 +51,6 @@ public class PageEntry implements Comparable<PageEntry> {
 
     @Override
     public String toString() {
-        return "PageEntry{pdf=" + pdfName + ", page=" + page + ", count=" + count + "}";
+        return "{\"pdf\": \"" + pdfName + "\", \"page\": " + page + ", \"count\"= " + count + "}";
     }
 }
